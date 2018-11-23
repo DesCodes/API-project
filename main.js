@@ -35,7 +35,7 @@ mapApp.getMap = function(x, y) {
 //this is a search input that takes the location argument and returns 10 unique results from the search
 mapApp.getUserInput = function(search) {
 	$.ajax({
-		url: 'http://proxy.hackeryou.com',
+		url: 'https://proxy.hackeryou.com',
 		dataType: 'json',
 		method: 'GET',
 		data: {
@@ -58,10 +58,29 @@ mapApp.getUserInput = function(search) {
 	}).catch(err => console.log(err))
 }
 
+//function that gets the users current position
+const getLocation = function() {
+	navigator.geolocation.getCurrentPosition(displayLocation);
+}
+//function that inputs the user location to the html
+const displayLocation = function(position) {
+	const latitude = `<h3>Latitude: ${position.coords.latitude}</h3>`;
+	const longitude	= `<h3>Longitude: ${position.coords.longitude}</h3>`;
+	console.log(latitude);
+	console.log(longitude);
+	$('#coords .latitude').empty().append(latitude);
+	$('#coords .longitude').empty().append(longitude);
+
+	//this inputs the current user coordinates and inputs the coordinates to the map
+	mapApp.map = L.mapbox.map('map', 'mapbox.streets').setView([position.coords.latitude, position.coords.longitude], 16);
+	//on load, add a circle to the center coordinates
+    mapApp.map = L.circle([position.coords.latitude, position.coords.longitude], 250).addTo(mapApp.map);
+}
 
 
-const getCoords = function() {
-	navigator.geolocation.getCurrentPosition;
+const slider = document.getElementById('slider');
+slider.oninput = function () {
+	out
 }
 
 
@@ -76,7 +95,7 @@ mapApp.init = function() {
 	});
 	
 	$('#userLocation').on('click', function() {
-		map.locate();
+		getLocation();
 	});
 }
 
