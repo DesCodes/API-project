@@ -3,14 +3,13 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="style.css">
-	<!-- <script src='https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
-	<link href='https://api.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' /> -->
 	<script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+	<link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 	<title>Restaurant Nearby</title>
 </head>
 <body>
-	
+
 	<form id="userInput" action="">
 		<input type="text">
 		<input type="submit">
@@ -19,10 +18,9 @@
 		<span class="meters"></span>
 	</form>
 	
-	<div id="coords">
-<!-- 		<h3 class="longitude"></h3>
-		<h3 class="latitude"></h3> -->
-	</div>
+	<div class="loading"><i class="fas fa-spinner"></i></div>
+
+	<div id="coords"></div>
 
 	<div id="results"></div>
 
