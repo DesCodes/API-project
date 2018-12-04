@@ -46,8 +46,14 @@ body {
   font-size: 65px;
   opacity: 0;
   transition: 1s ease-out;
+  /*animation: spin 2s linear infinite;*/
   /*transition-timing-function: cubic-bezier(.14,1.71,.23,-0.18);*/
 }
+
+/*@keyframes spin {
+  0% {transform: rotate(0deg);}
+  100% {transform: rotate(360deg);}
+}*/
 
 .spin {
   opacity: 0.5;

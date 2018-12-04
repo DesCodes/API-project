@@ -87,15 +87,13 @@ mapApp.getUserInput = function(search) {
 		}
 	}).then(function(res) {
 		console.log(res);
+		//push the long and lat values to the coordinates object
+		mapApp.coordinates.latitude = res[0].lat;
+		mapApp.coordinates.longitude = res[0].lon;
 		const longitude = mapApp.coordinates.longitude;
 		const latitude = mapApp.coordinates.latitude;
 		//invoke the html function here
 		mapApp.searchResults(res[0]);
-
-
-		//push the long and lat values to the coordinates object
-		mapApp.coordinates.latitude = res[0].lat;
-		mapApp.coordinates.longitude = res[0].lon;
 
 		mapApp.getMap(longitude, latitude);
 	}).catch(err => console.log(err))
@@ -197,6 +195,11 @@ mapApp.marker = function() {
 
 
 
+// const restaurantMarker = mapApp.restaurants[0].forEach(function(restaurant){
+// 	L.marker([restaurant.lat, restaurant.lon]).addTo(mapApp.map);
+// 	});
+
+
 
 //adds a draggable center marker
 mapApp.centerMarker = function() {
@@ -275,14 +278,20 @@ mapApp.init = function() {
 		interval = setInterval(function() {
 			mapApp.createCircle(radius, marker._latlng.lat, marker._latlng.lng);
 
+
 			for(let i = 0; i < mapApp.restaurants[0].length; i++) {
+				// const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
+					const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
+					return distance < radius;
+
+					const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon));
 			// 	measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon);
-				const distance = measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][0].lat, mapApp.restaurants[0][0].lon)
-				if (distance < radius) {
-					$('div.leaflet-marker-pane img:not(:first-child)').show();
-				} else {
-					$('div.leaflet-marker-pane img:not(:first-child)').hide();
-				}
+				// const distance = measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][0].lat, mapApp.restaurants[0][0].lon)
+				// if (distance < radius) {
+				// 	$('div.leaflet-marker-pane img:not(:first-child)').show();
+				// } else {
+				// 	$('div.leaflet-marker-pane img:not(:first-child)').hide();
+				// }
 			}
 			}, 1);
 	});
@@ -292,8 +301,9 @@ mapApp.init = function() {
 }
 
 
+
 //global center marker (gives the user access to the center marker)
-const marker = L.marker(new L.LatLng(mapApp.coordinates.latitude, mapApp.coordinates.longitude), {
+const marker = L.marker(new L.LatLng(mapApp.coordinates.latitude, mapApp.coordinates.longitude),{
 	icon: L.mapbox.marker.icon({
 	    'marker-color': '#03f',
 	    'marker-symbol': 'x',
