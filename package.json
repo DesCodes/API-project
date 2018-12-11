@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rhoga/API-project.git"
+    "url": "git+https://github.com/DesCodes/API-project.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Rhoga/API-project/issues"
+    "url": "https://github.com/DesCodes/API-project/issues"
   },
-  "homepage": "https://github.com/Rhoga/API-project#readme",
+  "homepage": "https://github.com/DesCodes/API-project#readme",
   "devDependencies": {
     "@babel/core": "^7.1.6",
     "@babel/preset-env": "^7.1.6",

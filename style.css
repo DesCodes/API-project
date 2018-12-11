@@ -42,21 +42,27 @@ body {
   bottom: 50%;
 }
 
+
 .fa-spinner {
   font-size: 65px;
   opacity: 0;
+  width: 80px;
   transition: 1s ease-out;
-  /*animation: spin 2s linear infinite;*/
+  animation: spin 1.15s linear infinite;
   /*transition-timing-function: cubic-bezier(.14,1.71,.23,-0.18);*/
 }
 
-/*@keyframes spin {
+.fa-spinner path {
+  fill: gray;
+}
+
+@keyframes spin {
   0% {transform: rotate(0deg);}
   100% {transform: rotate(360deg);}
-}*/
+}
 
 .spin {
-  opacity: 0.5;
-  transform: rotate(360deg);
+  opacity: 0.75;
+  /*transform: rotate(360deg);*/
 }
 

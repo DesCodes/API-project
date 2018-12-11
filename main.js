@@ -2,7 +2,7 @@ const apiKey = 'eabc1c71960388';
 L.mapbox.accessToken = 'pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw';
 
 
-								//GLOBAL OBJECT VARIABLES
+											// GLOBAL OBJECT VARIABLES //
 mapApp = {}
 //global object variable for the get map function (default set to null)
 //by making the global object then it is possible to access the map
@@ -34,7 +34,7 @@ mapApp.searchResults = function(results) {
 
 
 
-								// OBJECT FUNCTIONS
+											// OBJECT FUNCTIONS //
 //function that produces a map
 mapApp.getMap = function(x, y) {
 	const latitude = mapApp.coordinates.latitude;
@@ -72,7 +72,7 @@ mapApp.createCircle = function(meters, x, y) {
 }
 
 
-//this is a search input that takes the location argument and returns 10 unique results from the search
+// this is a search input that takes the location argument and returns 10 unique results from the search
 mapApp.getUserInput = function(search) {
 	$.ajax({
 		url: 'https://proxy.hackeryou.com',
@@ -99,26 +99,33 @@ mapApp.getUserInput = function(search) {
 	}).catch(err => console.log(err))
 }
 
+// mapApp.getUserInput = function(search) {
+// 	$.ajax({
+// 		url: 'https://api.locationiq.com/v1/autocomplete.php',
+// 		dataType: 'json',
+// 		method: 'GET',
+// 		crossDomain: true,
+// 		data: {
+// 			params: {
+// 				key: apiKey,
+// 				q: search
+// 			}
+// 		}
+// 	}).then(function(res) {
+// 		console.log(res);
+// 		//push the long and lat values to the coordinates object
+// 		mapApp.coordinates.latitude = res[0].lat;
+// 		mapApp.coordinates.longitude = res[0].lon;
+// 		const longitude = mapApp.coordinates.longitude;
+// 		const latitude = mapApp.coordinates.latitude;
+// 		//invoke the html function here
+// 		mapApp.searchResults(res[0]);
 
-//function that gets the users current position
-const getLocation = function() {
-	navigator.geolocation.getCurrentPosition(displayLocation);
+// 		mapApp.getMap(longitude, latitude);
+// 	}).catch(err => console.log(err))
+// }
 
-	//adds the loading gif
-	const spinner = function() {
-		$('.fa-spinner').addClass('spin');
-	}
-	//removes the loading gif
-	const removeSpinner = function() {
-		$('.fa-spinner').removeClass('spin');
-	}
-	setTimeout(spinner, 500);
-	setTimeout(removeSpinner, 1600);
-	setTimeout(spinner, 3200);
-	setTimeout(removeSpinner, 4300);
-	setTimeout(spinner, 5600);
-	setTimeout(removeSpinner, 6800);
-}
+
 //function that inputs the user location to the html
 const displayLocation = function(position) {
 	//updates the user coordinates to the coordinates object
@@ -133,7 +140,7 @@ const displayLocation = function(position) {
 							 <h3>Longitude: ${longitude}</h3>`;
 
 	//puts the coordinates in html
-	$('#coords').empty().append(showCoordinates);
+	// $('#coords').empty().append(showCoordinates);
 
 	//this invokes the getMap function with the users current location
 	mapApp.getMap(longitude, latitude);
@@ -154,50 +161,110 @@ mapApp.PointOfInterest = function(x, y) {
 			tag: 'restaurant'
 		}
 	}).then(function(res) {
-			// console.log(res);
-			//saves all the returned api calls to the restaurants object
-			mapApp.restaurants = [];
-			mapApp.restaurants.push(res);
-
-			// iterates all the restaurant array indexes to remove the markers
-			for (let i = 0; i < res.length; i++) {
-				// mapApp.removeMarker(res[i].distance, radius);
-			}
-			//invokes the marker function
-			// mapApp.marker();
+		// console.log(res);
+		//saves all the returned api calls to the restaurants object
+		mapApp.restaurants = [];
+		mapApp.restaurants.push(res);
+		//}
+		//invokes the marker function
+		mapApp.marker();
+		removeSpinner();
 	});
 }
 
 
-//formula that calculates the distance from two longitude and latitude points
-const measureDistance = function(lat1, lon1, lat2, lon2) {
-	var R = 6378.137; //radius of earth in KM
-	var dLat = lat2 * Math.PI/180 - lat1 * Math.PI/180;
-	var dLon = lon2 * Math.PI/180 - lon1 * Math.PI/180;
-	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * 
-			Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
-	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-	var d = R * c;
-	return Math.floor(d * 1000); //meters
-}
-// measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][0].lat, mapApp.restaurants[0][0].lon);
 
-
-// function that adds a marker
+// function that adds a marker for each restaurant
 mapApp.marker = function() {
-	mapApp.restaurants[0].forEach(function(restaurant) {
+	mapApp.restaurants[0].forEach(restaurant => {
 		//adds a marker for all the restaurants
-		L.marker([restaurant.lat, restaurant.lon]).addTo(mapApp.map);
-		// console.log(restaurant);
+		const restaurantName = restaurant.name;
+		const individualPopup = L.popup()
+			.setLatLng([restaurant.lat, restaurant.lon])
+			.setContent(`${restaurantName}`);
+
+		L.marker([restaurant.lat, restaurant.lon], {opacity: 0})
+			.bindPopup(individualPopup)
+			.addTo(mapApp.map);
 	});
-		// $('div.leaflet-marker-pane img:not(:first-child)').hide();
 }
 
+//updates the restaurant marker distance from the center marker
+mapApp.updateDistance = function() {
+	mapApp.restaurants[0].forEach(markerDistance => {
+	// mapApp.map['_layers'].forEach(markerDistance => {
+	// $.each(mapApp.map._layers[35]._latlng, markerDistance => {
+		const lat = parseFloat(markerDistance.lat);
+		const lon = parseFloat(markerDistance.lon);
+		const distance = marker._latlng.distanceTo([lat, lon]);
+		// const distance = marker._latlng.distanceTo(markerDistance._latlng);
+		// console.log(markerDistance)
+		markerDistance.distance = distance;
+		// markerDistance._layers['distance'] = distance;
+	});
+}
 
+mapApp.checkDistance = function() {
+	mapApp.restaurants[0].filter(restaurant => {
+		const lat1 = parseFloat(restaurant.lat);
+		const lng1 = parseFloat(restaurant.lon);
+		if (restaurant.distance < radius) {
 
-// const restaurantMarker = mapApp.restaurants[0].forEach(function(restaurant){
-// 	L.marker([restaurant.lat, restaurant.lon]).addTo(mapApp.map);
-// 	});
+				const item = this;
+				$.each(item, function(index, value) {
+					//saves all the results into an object variable
+
+					if (!this._layers) {
+						// Quit if _layers is undefined (sometimes is... dunno why)
+						return;
+					}
+
+					const arrayValues = Object.values(this._layers);
+					
+					arrayValues.filter(function (coordinate){ 
+						return coordinate._latlng;
+					}).forEach(coordinate => {
+
+						const latLng = coordinate._latlng;
+						const lat = latLng.lat;
+						const lng = latLng.lng;
+
+						if(lat1 == lat && lng1 == lng) {
+							//makes the markers visible if within range
+							coordinate.setOpacity(1);
+						}
+					});
+				});
+				
+		} else {
+			const item = this;
+			$.each(item, function(index, value) {
+				//saves all the results into an object variable
+
+				if (!this._layers) {
+					// Quit if _layers is undefined (sometimes is... dunno why)
+					return;
+				}
+
+				const arrayValues = Object.values(this._layers);
+				
+				arrayValues.filter(function (coordinate){ 
+					return coordinate._latlng;
+				}).forEach(coordinate => {
+
+					const latLng = coordinate._latlng;
+					const lat = latLng.lat;
+					const lng = latLng.lng;
+
+					if(lat1 == lat && lng1 == lng) {
+						//makes the markers invisible if out of range
+						coordinate.setOpacity(0);
+					}
+				});
+			});
+		}
+	});
+}
 
 
 
@@ -210,41 +277,17 @@ mapApp.centerMarker = function() {
 	const longitude = marker._latlng.lng;
 
 	marker.addTo(mapApp.map);
-	// console.log(marker._latlng);
-	// mapApp.createCircle(radius, marker._latlng.lat, marker._latlng.lng);
 	mapApp.createCircle(radius, latitude, longitude);
 }
 
 
 
-//function that removes markers if they are out of range
-mapApp.removeMarker = function(radius) {
-	// const markers = $('L.marker');
-	for(let i = 0; i < mapApp.restaurants[0].length; i++) {
-		if(mapApp.restaurants[0][i].distance < radius){
-			// console.log(i)
-			// L.marker([mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon]).addTo(mapApp.map);
-			//need to target this in the map.restaurants markers, its only targeting all the
-			//div markers and it doesnt know which one to target
-		// $('div.leaflet-marker-pane img:not(:first-child)').hide();
-		} else {
-		//removes all the marker except the first-child (first child is the center marker)
-		// $('div.leaflet-marker-pane img:not(:first-child)').show();
-		}
-	// }
-	const res = mapApp.restaurants[0];
-	const eachRes = res[i].distance;
-	console.log(eachRes)
-	//filter method 
-	const results = res.filter(eachRes => eachRes > 500);
-	console.log(results);
-	}
-}
 
 
-//this is where all the event handlers go
-mapApp.init = function() {
 
+										// GENERAL GLOBAL FUNCTIONS //
+
+const submitInput = function() {
 	$('#userInput').on('submit', function(e) {
 		e.preventDefault();
 		
@@ -252,26 +295,44 @@ mapApp.init = function() {
 		$('input[type=text]').val('');
 		mapApp.getUserInput(userInput);
 	});
-	
-	$('#userLocation').on('click', function() {
-		getLocation();
-	});
+}
 
-	//on slider change, get the value of the slider value
+//displays the loading gif
+const showSpinner = function() {
+	$('#userLocation').on('click', function() {
+		$('.fa-spinner').addClass('spin');
+	});
+}
+//removes the loading gif
+const removeSpinner = function() {
+	$('.fa-spinner').removeClass('spin');
+	$('.fa-spinner').css('animation', 'none');
+}
+//function that gets the users current position
+const getLocation = function() {
+	$('#userLocation').on('click', function() {
+		navigator.geolocation.getCurrentPosition(displayLocation);
+	});
+}
+//on slider change, get the value of the slider value
+const sliderChange = function() {
 	$('#slider').on('input', function() {
 		const meters = $(this).val();
 		const showMeters = `${meters} Meters`;
-		const longitude = mapApp.coordinates.longitude;
-		const latitude = mapApp.coordinates.latitude;
+		const longitude = marker._latlng.lng;
+		const latitude = marker._latlng.lat;
 
 		$('.meters').empty().append(showMeters);
 		//gets the value from the slider and updates the value to the radius object
 		radius = parseInt(meters);
-		// mapApp.getMap(longitude, latitude);
-		mapApp.createCircle(radius, latitude, longitude);
-	});
 
-	//locks the circle to the center marker
+		mapApp.createCircle(radius, latitude, longitude);
+		mapApp.checkDistance();
+	});
+}
+
+//locks the circle to the center marker
+const updateCircle = function() {
 	let interval;
 	$('body').on('mousedown', '.leaflet-marker-draggable', function(e){
 		// mapApp.centerMarker();
@@ -281,23 +342,44 @@ mapApp.init = function() {
 
 			for(let i = 0; i < mapApp.restaurants[0].length; i++) {
 				// const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
-					const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
+				const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
 					return distance < radius;
 
-					const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon));
-			// 	measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon);
-				// const distance = measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][0].lat, mapApp.restaurants[0][0].lon)
-				// if (distance < radius) {
-				// 	$('div.leaflet-marker-pane img:not(:first-child)').show();
-				// } else {
-				// 	$('div.leaflet-marker-pane img:not(:first-child)').hide();
-				// }
+				const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].lat, mapApp.restaurants[0][i].lon));
 			}
-			}, 1);
+		}, 1);
 	});
 	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
 		clearInterval(interval);
 	});
+}
+//tracks the restaurants near the center marker
+const trackRestaurants = function() {
+	let secondInterval;
+	$('body').on('mousedown', '.leaflet-marker-draggable', function(e){
+		secondInterval = setInterval(function() {
+			mapApp.updateDistance();
+			mapApp.checkDistance();
+		}, 250);
+	});
+	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
+		clearInterval(secondInterval);
+	});
+}
+
+
+
+											//	EVENT HANDLERS //
+
+mapApp.init = function() {
+
+	submitInput();
+	showSpinner();
+	getLocation();
+	sliderChange();
+	updateCircle();
+	trackRestaurants();
+
 }
 
 
