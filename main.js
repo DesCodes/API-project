@@ -1,6 +1,5 @@
 
-
-const apiKey = 'eabc1c71960388';
+// const apiKey = 'eabc1c71960388';
 L.mapbox.accessToken = 'pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw';
 const yelpAPI = 'NeeK12jNxlEAng-IzrJeyS2vV7XbhyXADQmZK8_rLgVb8EzTfy3S-1fJZTYbeM-HpflLGC8gKwbOczWDgxHn_ul-sT2LDYRqBYn4_0AtxBMxeu8PGQqx3YHYJosRXHYx';
 
@@ -120,9 +119,12 @@ mapApp.getUserInput = function(search) {
 			}
 		}
 	}).then(function(res){
-
-		mapApp.coordinates.latitude = res.businesses[0].coordinates.latitude;
-		mapApp.coordinates.longitude = res.businesses[0].coordinates.longitude;
+		// mapApp.coordinates.latitude = res.businesses[0].coordinates.latitude;
+		// mapApp.coordinates.longitude = res.businesses[0].coordinates.longitude;
+		// const latitude = mapApp.coordinates.latitude - 0.0000001;
+		// const longitude = mapApp.coordinates.longitude + 0.0000001;
+		mapApp.coordinates.latitude = res.region.center.latitude;
+		mapApp.coordinates.longitude = res.region.center.longitude;
 		const latitude = mapApp.coordinates.latitude;
 		const longitude = mapApp.coordinates.longitude;
 
@@ -275,6 +277,8 @@ mapApp.PointOfInterest = function(x, y) {
 }
 
 
+<<<<<<< HEAD
+=======
 //formula that calculates the distance from two longitude and latitude points
 const measureDistance = function(lat1, lon1, lat2, lon2) {
 	var R = 6378.137; //radius of earth in KM
@@ -305,6 +309,7 @@ const measureDistance = function(lat1, lon1, lat2, lon2) {
 // 			.addTo(mapApp.map);
 // 	});
 // }
+>>>>>>> ef103b2838f630357b43029081cb708d3ff9bfef
 // function that adds a marker for each restaurant (yelp)
 mapApp.marker = function() {
 	mapApp.restaurants[0].forEach(restaurant => {
@@ -326,7 +331,7 @@ mapApp.marker = function() {
 			.setLatLng([restaurant.coordinates.latitude, restaurant.coordinates.longitude])
 			.setContent(`${markerCard}`);
 
-		L.marker([restaurant.coordinates.latitude, restaurant.coordinates.longitude], {opacity: 0})
+		L.marker([restaurant.coordinates.latitude, restaurant.coordinates.longitude], {zIndexOffset: 0, opacity: 0})
 			.bindPopup(individualPopup)
 			.addTo(mapApp.map);
 	});
@@ -340,11 +345,10 @@ mapApp.updateDistance = function() {
 		const lat = parseFloat(markerDistance.coordinates.latitude);
 		const lon = parseFloat(markerDistance.coordinates.longitude);
 		const distance = marker._latlng.distanceTo([lat, lon]);
-		// const distance = marker._latlng.distanceTo(markerDistance._latlng);
-		// console.log(markerDistance)
+
 		markerDistance.distance = distance;
-		// markerDistance._layers['distance'] = distance;
 	});
+	mapApp.checkDistance();
 }
 
 mapApp.checkDistance = function() {
@@ -355,31 +359,31 @@ mapApp.checkDistance = function() {
 		const lng1 = restaurant.coordinates.longitude;
 		if (restaurant.distance < radius) {
 
-				const item = this;
-				$.each(item, function(index, value) {
-					//saves all the results into an object variable
+			const item = this;
+			$.each(item, function(index, value) {
+				//saves all the results into an object variable
 
-					if (!this._layers) {
-						// Quit if _layers is undefined (sometimes is... dunno why)
-						return;
-					}
+				if (!this._layers) {
+					// Quit if _layers is undefined (sometimes is... dunno why)
+					return;
+				}
 
-					const arrayValues = Object.values(this._layers);
+				const arrayValues = Object.values(this._layers);
+				
+				arrayValues.filter(coordinate => { 
+					return coordinate._latlng;
+				}).forEach(coordinate => {
 					
-					arrayValues.filter(function (coordinate){ 
-						return coordinate._latlng;
-					}).forEach(coordinate => {
+					const latLng = coordinate._latlng;
+					const lat = latLng.lat;
+					const lng = latLng.lng;
 
-						const latLng = coordinate._latlng;
-						const lat = latLng.lat;
-						const lng = latLng.lng;
-
-						if(lat1 == lat && lng1 == lng) {
-							//makes the markers visible if within range
-							coordinate.setOpacity(1);
-						}
-					});
+					if(lat1 == lat && lng1 == lng) {
+						//makes the markers visible if within range
+						coordinate.setOpacity(1);
+					}
 				});
+			});
 				
 		} else {
 			const item = this;
@@ -393,7 +397,7 @@ mapApp.checkDistance = function() {
 
 				const arrayValues = Object.values(this._layers);
 				
-				arrayValues.filter(function (coordinate){ 
+				arrayValues.filter(coordinate => { 
 					return coordinate._latlng;
 				}).forEach(coordinate => {
 
@@ -582,6 +586,7 @@ mapApp.init = function() {
 
 //adds a draggable center marker
 mapApp.centerMarker = function() {
+
 	//returns the marker coordinates
 	marker._latlng.lat = mapApp.coordinates.latitude;
 	marker._latlng.lng = mapApp.coordinates.longitude;
@@ -658,13 +663,16 @@ const updateCircle = function() {
 
 
 			for(let i = 0; i < mapApp.restaurants[0].length; i++) {
+
+				const latitude = mapApp.restaurants[0][i].coordinates.latitude;
+				const longitude = mapApp.restaurants[0][i].coordinates.longitude;
 				// const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
-				const distance = marker._latlng.distanceTo([mapApp.restaurants[0][i].coordinates.latitude, mapApp.restaurants[0][i].coordinates.longitude]);
+				const distance = marker._latlng.distanceTo([latitude, longitude]);
 					return distance < radius;
 
-				const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].coordinates.latitude, mapApp.restaurants[0][i].coordinates.longitude));
+				// const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].coordinates.latitude, mapApp.restaurants[0][i].coordinates.longitude));
 			}
-		}, 1);
+		}, 10);
 	});
 	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
 		clearInterval(interval);
@@ -676,7 +684,7 @@ const trackRestaurants = function() {
 	$('body').on('mousedown', '.leaflet-marker-draggable', function(e){
 		secondInterval = setInterval(function() {
 			mapApp.updateDistance();
-			mapApp.checkDistance();
+			// mapApp.checkDistance();
 		}, 250);
 	});
 	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
@@ -699,12 +707,11 @@ const trackRestaurants = function() {
 
 mapApp.init = function() {
 
-	getLocation();
 	submitInput();
-	showSpinner();
 	getLocation();
-	sliderChange();
+	showSpinner();
 	updateCircle();
+	sliderChange();
 	trackRestaurants();
 
 
@@ -731,8 +738,6 @@ mapApp.init = function() {
 	});
 }
 
-
-
 //global center marker (gives the user access to the center marker)
 const marker = L.marker(new L.LatLng(mapApp.coordinates.latitude, mapApp.coordinates.longitude),{
 	icon: L.mapbox.marker.icon({
@@ -742,8 +747,11 @@ const marker = L.marker(new L.LatLng(mapApp.coordinates.latitude, mapApp.coordin
 	    'marker-symbol': 'x',
 	    'marker-size': 'large'
 	}),
-	draggable: true
+	draggable: true,
+	zIndexOffset: 500
 });
+
+
 
 $(function() {
 
