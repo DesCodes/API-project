@@ -1,5 +1,8 @@
+
+
 const apiKey = 'eabc1c71960388';
 L.mapbox.accessToken = 'pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw';
+const yelpAPI = 'NeeK12jNxlEAng-IzrJeyS2vV7XbhyXADQmZK8_rLgVb8EzTfy3S-1fJZTYbeM-HpflLGC8gKwbOczWDgxHn_ul-sT2LDYRqBYn4_0AtxBMxeu8PGQqx3YHYJosRXHYx';
 
 
 											// GLOBAL OBJECT VARIABLES //
@@ -23,9 +26,9 @@ let radius = 500;
 
 //function that updates the html from the search request
 mapApp.searchResults = function(results) {
-	const searchResults = `<h2>${results.display_place}</h2>
-							<h3>${results.display_address}</h3>
-							<h3>Type: ${results.type}</h3>`;
+	const searchResults = `<h2 class="searchResults">${results.display_place}</h2>
+							<h3 class="searchResults italic">${results.display_address}</h3>
+							<h3 class="searchResults">Type: ${results.type}</h3>`;
 
 	$('#results').empty().append(searchResults);
 }
@@ -55,6 +58,7 @@ mapApp.getMap = function(x, y) {
 	mapApp.centerMarker();
 
 	//gets the points of interests nearby
+
 	mapApp.PointOfInterest(longitude, latitude);
 	//invoke the marker function
 	// mapApp.marker();
@@ -72,19 +76,83 @@ mapApp.createCircle = function(meters, x, y) {
 }
 
 
-//this is a search input that takes the location argument and returns 10 unique results from the search
+// this is a search input that takes the location argument and returns 10 unique results from the search
+// mapApp.getUserInput = function(search) {
+// 	$.ajax({
+// 		url: 'https://proxy.hackeryou.com',
+// 		dataType: 'json',
+// 		method: 'GET',
+// 		data: {
+// 			reqUrl: 'https://api.locationiq.com/v1/autocomplete.php',
+// 			params: {
+// 				key: apiKey,
+// 				q: search
+// 			}
+// 		}
+// 	}).then(function(res) {
+// 		// console.log(res);
+// 		//push the long and lat values to the coordinates object
+// 		mapApp.coordinates.latitude = res[0].lat;
+// 		mapApp.coordinates.longitude = res[0].lon;
+// 		const longitude = mapApp.coordinates.longitude;
+// 		const latitude = mapApp.coordinates.latitude;
+// 		//invoke the html function here
+// 		mapApp.searchResults(res[0]);
+
+// 		mapApp.getMap(longitude, latitude);
+// 	});
+// }
+
 mapApp.getUserInput = function(search) {
 	$.ajax({
 		url: 'https://proxy.hackeryou.com',
 		dataType: 'json',
 		method: 'GET',
 		data: {
-			reqUrl: 'https://api.locationiq.com/v1/autocomplete.php',
+			reqUrl: 'https://api.yelp.com/v3/businesses/search',
 			params: {
-				key: apiKey,
-				q: search
+				location: search,
+				limit: 50,
+				radius: 500,
+			},
+			proxyHeaders: {
+				Authorization: 'Bearer ' + yelpAPI,
 			}
 		}
+	}).then(function(res){
+
+		mapApp.coordinates.latitude = res.businesses[0].coordinates.latitude;
+		mapApp.coordinates.longitude = res.businesses[0].coordinates.longitude;
+		const latitude = mapApp.coordinates.latitude;
+		const longitude = mapApp.coordinates.longitude;
+
+		mapApp.getMap(longitude, latitude);
+	});
+}
+
+mapApp.yelpSearch = function(x, y) {
+	$.ajax({
+		url: 'https://proxy.hackeryou.com',
+		dataType: 'json',
+		method: 'GET',
+		data: {
+			reqUrl: 'https://api.yelp.com/v3/businesses/search',
+			params: {
+				latitude: x,
+				longitude: y,
+				limit: 50,
+				radius: 500,
+			},
+			proxyHeaders: {
+				Authorization: 'Bearer ' + yelpAPI,
+			}
+		}
+	}).then(function(res){
+		console.log(res)
+	});
+}
+
+
 	}).then(function(res) {
 		console.log(res);
 		//push the long and lat values to the coordinates object
@@ -115,7 +183,7 @@ const displayLocation = function(position) {
 							 <h3>Longitude: ${longitude}</h3>`;
 
 	//puts the coordinates in html
-	$('#coords').empty().append(showCoordinates);
+	// $('#coords').empty().append(showCoordinates);
 
 	//this invokes the getMap function with the users current location
 	mapApp.getMap(longitude, latitude);
@@ -123,8 +191,55 @@ const displayLocation = function(position) {
 
 
 // function that gets Points of Interests
+// mapApp.PointOfInterest = function(x, y) {
+// 	$.ajax({
+// 		url: 'https://us1.locationiq.com/v1/nearby.php?',
+// 		dataType: 'json',	
+// 		method: 'GET',
+// 		data: {
+// 			key: apiKey,
+// 			lat: y,
+// 			lon: x,
+// 			radius: 5000,
+// 			tag: 'restaurant'
+// 		}
+// 	}).then(function(res) {
+// 		//saves all the returned api calls to the restaurants object
+// 		mapApp.restaurants = [];
+// 		mapApp.restaurants.push(res);
+// 		//}
+// 		//invokes the marker function
+// 		mapApp.marker();
+// 		removeSpinner();
+// 	});
+// }
+
 mapApp.PointOfInterest = function(x, y) {
 	$.ajax({
+		url: 'https://proxy.hackeryou.com',
+		dataType: 'json',
+		method: 'GET',
+		data: {
+			reqUrl: 'https://api.yelp.com/v3/businesses/search',
+			params: {
+				latitude: x,
+				longitude: y,
+				limit: 50,
+				radius: 500,
+			},
+			proxyHeaders: {
+				Authorization: 'Bearer ' + yelpAPI,
+			}
+		}
+	}).then(function(res){
+		console.log(res)
+
+		mapApp.restaurants = [];
+		mapApp.restaurants.push(res.businesses);
+
+		mapApp.marker();
+		removeSpinner();
+	});
 		url: 'https://us1.locationiq.com/v1/nearby.php?',
 		dataType: 'json',	
 		method: 'GET',
@@ -172,6 +287,129 @@ const measureDistance = function(lat1, lon1, lat2, lon2) {
 	return Math.floor(d * 1000); //meters
 }
 // measureDistance(marker._latlng.lat, marker._latlng.lng, mapApp.restaurants[0][0].lat, mapApp.restaurants[0][0].lon);
+
+
+
+
+// function that adds a marker for each restaurant (locationIQ)
+// mapApp.marker = function() {
+// 	mapApp.restaurants[0].forEach(restaurant => {
+// 		//adds a marker for all the restaurants
+// 		const restaurantName = restaurant.name;
+// 		const individualPopup = L.popup()
+// 			.setLatLng([restaurant.lat, restaurant.lon])
+// 			.setContent(`${restaurantName}`);
+
+// 		L.marker([restaurant.lat, restaurant.lon], {opacity: 0})
+// 			.bindPopup(individualPopup)
+// 			.addTo(mapApp.map);
+// 	});
+// }
+// function that adds a marker for each restaurant (yelp)
+mapApp.marker = function() {
+	mapApp.restaurants[0].forEach(restaurant => {
+		//adds a marker for all the restaurants
+		const restaurantName = restaurant.name;
+		const markerCard = `<div class="markerCard">
+								<img src="${restaurant.image_url}">
+								<a href='${restaurant.url}' target='_blank'>	
+									<h4>${restaurant.name}</h4>
+								</a>	
+								<p>Rating: ${restaurant.rating}</p>
+								<p>Category: ${restaurant.categories[0].title}</p>
+								<p>Phone: ${restaurant.phone}</p>
+							</div>
+							`
+		// const latitude = restaurant.coordinates.latitude;
+		// const longitude = restaurant.coordinates.longitude;
+		const individualPopup = L.popup()
+			.setLatLng([restaurant.coordinates.latitude, restaurant.coordinates.longitude])
+			.setContent(`${markerCard}`);
+
+		L.marker([restaurant.coordinates.latitude, restaurant.coordinates.longitude], {opacity: 0})
+			.bindPopup(individualPopup)
+			.addTo(mapApp.map);
+	});
+}
+
+//updates the restaurant marker distance from the center marker
+mapApp.updateDistance = function() {
+	mapApp.restaurants[0].forEach(markerDistance => {
+	// mapApp.map['_layers'].forEach(markerDistance => {
+	// $.each(mapApp.map._layers[35]._latlng, markerDistance => {
+		const lat = parseFloat(markerDistance.coordinates.latitude);
+		const lon = parseFloat(markerDistance.coordinates.longitude);
+		const distance = marker._latlng.distanceTo([lat, lon]);
+		// const distance = marker._latlng.distanceTo(markerDistance._latlng);
+		// console.log(markerDistance)
+		markerDistance.distance = distance;
+		// markerDistance._layers['distance'] = distance;
+	});
+}
+
+mapApp.checkDistance = function() {
+	mapApp.restaurants[0].filter(restaurant => {
+		// const lat1 = parseFloat(restaurant.lat);
+		// const lng1 = parseFloat(restaurant.lon);
+		const lat1 = restaurant.coordinates.latitude;
+		const lng1 = restaurant.coordinates.longitude;
+		if (restaurant.distance < radius) {
+
+				const item = this;
+				$.each(item, function(index, value) {
+					//saves all the results into an object variable
+
+					if (!this._layers) {
+						// Quit if _layers is undefined (sometimes is... dunno why)
+						return;
+					}
+
+					const arrayValues = Object.values(this._layers);
+					
+					arrayValues.filter(function (coordinate){ 
+						return coordinate._latlng;
+					}).forEach(coordinate => {
+
+						const latLng = coordinate._latlng;
+						const lat = latLng.lat;
+						const lng = latLng.lng;
+
+						if(lat1 == lat && lng1 == lng) {
+							//makes the markers visible if within range
+							coordinate.setOpacity(1);
+						}
+					});
+				});
+				
+		} else {
+			const item = this;
+			$.each(item, function(index, value) {
+				//saves all the results into an object variable
+
+				if (!this._layers) {
+					// Quit if _layers is undefined (sometimes is... dunno why)
+					return;
+				}
+
+				const arrayValues = Object.values(this._layers);
+				
+				arrayValues.filter(function (coordinate){ 
+					return coordinate._latlng;
+				}).forEach(coordinate => {
+
+					const latLng = coordinate._latlng;
+					const lat = latLng.lat;
+					const lng = latLng.lng;
+
+					if(lat1 == lat && lng1 == lng) {
+						//makes the markers invisible if out of range
+						coordinate.setOpacity(0);
+					}
+				});
+			});
+		}
+	});
+}
 
 
 // function that adds a marker for each restaurant
@@ -342,6 +580,26 @@ const getLocation = function() {
 
 mapApp.init = function() {
 
+//adds a draggable center marker
+mapApp.centerMarker = function() {
+	//returns the marker coordinates
+	marker._latlng.lat = mapApp.coordinates.latitude;
+	marker._latlng.lng = mapApp.coordinates.longitude;
+	const latitude = marker._latlng.lat;
+	const longitude = marker._latlng.lng;
+
+	marker.addTo(mapApp.map);
+	mapApp.createCircle(radius, latitude, longitude);
+}
+
+
+
+
+
+
+										// GENERAL GLOBAL FUNCTIONS //
+
+const submitInput = function() {
 	$('#userInput').on('submit', function(e) {
 		e.preventDefault();
 		
@@ -349,23 +607,82 @@ mapApp.init = function() {
 		$('input[type=text]').val('');
 		mapApp.getUserInput(userInput);
 	});
-	
+}
+
+//displays the loading gif
+const showSpinner = function() {
 	$('#userLocation').on('click', function() {
+		$('.fa-spinner').addClass('spin');
 		getLocation();
 		//displays loading gif
 		showSpinner();
 	});
-
-	//on slider change, get the value of the slider value
+}
+//removes the loading gif
+const removeSpinner = function() {
+	$('.fa-spinner').removeClass('spin');
+	$('.fa-spinner').css('animation', 'none');
+}
+//function that gets the users current position
+const getLocation = function() {
+	$('#userLocation').on('click', function() {
+		navigator.geolocation.getCurrentPosition(displayLocation);
+	});
+}
+//on slider change, get the value of the slider value
+const sliderChange = function() {
 	$('#slider').on('input', function() {
 		const meters = $(this).val();
 		const showMeters = `${meters} Meters`;
+		const longitude = marker._latlng.lng;
+		const latitude = marker._latlng.lat;
 		const longitude = mapApp.coordinates.longitude;
 		const latitude = mapApp.coordinates.latitude;
 
 		$('.meters').empty().append(showMeters);
 		//gets the value from the slider and updates the value to the radius object
 		radius = parseInt(meters);
+
+		mapApp.createCircle(radius, latitude, longitude);
+		mapApp.checkDistance();
+	});
+}
+
+//locks the circle to the center marker
+const updateCircle = function() {
+	let interval;
+	$('body').on('mousedown', '.leaflet-marker-draggable', function(e){
+		// mapApp.centerMarker();
+		interval = setInterval(function() {
+			mapApp.createCircle(radius, marker._latlng.lat, marker._latlng.lng);
+
+
+			for(let i = 0; i < mapApp.restaurants[0].length; i++) {
+				// const distance = marker._latlng.distanceTo(mapApp.restaurants[0][i]);
+				const distance = marker._latlng.distanceTo([mapApp.restaurants[0][i].coordinates.latitude, mapApp.restaurants[0][i].coordinates.longitude]);
+					return distance < radius;
+
+				const newMarker = L.marker(new L.LatLng(mapApp.restaurants[0][i].coordinates.latitude, mapApp.restaurants[0][i].coordinates.longitude));
+			}
+		}, 1);
+	});
+	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
+		clearInterval(interval);
+	});
+}
+//tracks the restaurants near the center marker
+const trackRestaurants = function() {
+	let secondInterval;
+	$('body').on('mousedown', '.leaflet-marker-draggable', function(e){
+		secondInterval = setInterval(function() {
+			mapApp.updateDistance();
+			mapApp.checkDistance();
+		}, 250);
+	});
+	$('body').on('mouseup', '.leaflet-marker-draggable', function(e){
+		clearInterval(secondInterval);
+	});
+}
 		// mapApp.getMap(longitude, latitude);
 		mapApp.createCircle(radius, latitude, longitude);
 	});
@@ -376,6 +693,19 @@ mapApp.init = function() {
 		// mapApp.centerMarker();
 		interval = setInterval(function() {
 			mapApp.createCircle(radius, marker._latlng.lat, marker._latlng.lng);
+
+      
+											//	EVENT HANDLERS //
+
+mapApp.init = function() {
+
+	getLocation();
+	submitInput();
+	showSpinner();
+	getLocation();
+	sliderChange();
+	updateCircle();
+	trackRestaurants();
 
 
 			for(let i = 0; i < mapApp.restaurants[0].length; i++) {
@@ -406,6 +736,8 @@ mapApp.init = function() {
 //global center marker (gives the user access to the center marker)
 const marker = L.marker(new L.LatLng(mapApp.coordinates.latitude, mapApp.coordinates.longitude),{
 	icon: L.mapbox.marker.icon({
+	    // 'marker-color': '#03f',
+	    'marker-color': '#F58714',
 	    'marker-color': '#03f',
 	    'marker-symbol': 'x',
 	    'marker-size': 'large'
