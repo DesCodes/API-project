@@ -7,25 +7,30 @@
 	<link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 
-	<title>Restaurant Nearby</title>
+	<title>Restaurant Locator</title>
 </head>
 <body>
-	<div class="foodImage">
-		<!-- <img src="images/skyline.jpg" alt=""> -->
+	<div class="formBox">
+		<h1 class="title">Restaurant Locator</h1>
+
+		<form id="userInput" action="" class="wrapper userInput">
+			<input type="text" placeholder="Input location">
+			<input type="submit">
+			<button id="userLocation">Retrieve user location</button>
+			
+		</form>
 	</div>
 
-	<form id="userInput" action="" class="wrapper">
-		<input type="text" placeholder="Input Landmark">
-		<input type="submit">
-		<button id="userLocation">User Location</button>
+	<form class="wrapper rangeBox" action="">
+		<h4>Configure Radius</h4>
 		<input id="slider" type="range" min="500" max="1000" value="500">
-		<span class="meters"></span>
+		<h4 class="meters">500 Meters</h4>
 	</form>
 	
 	<div class="loading" class="wrapper">
 		<svg aria-hidden="true" data-prefix="fas" data-icon="spinner" class="svg-inline--fa fa-spinner fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 			<path fill="currentColor" d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"></path>
-		</svg><!-- <i class="fas fa-spinner"></i> -->
+		</svg>
 	</div>
 
 	<div id="coords" class="wrapper"></div>
@@ -33,10 +38,25 @@
 	<div id="results" class="wrapper"></div>
 
 	<div class="mapBox wrapper">
-		<div id="map"></div>
+		<div id="map">
+			<p class="instructions">
+				INSTRUCTIONS:
+			</p><br>
+			<p class="instructions">
+				Type any location, coordinates, or landmarks in the gray input box
+			</p>
+			<div class="instructions">
+				OR
+			</div>
+			<p class="instructions">
+				Press the 'Retrieve User Location' button
+			</p>
+		</div>
 	</div>
 
-
+	<footer>
+		<p>Made with Yelp API and Mapbox</p>
+	</footer>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="main.js"></script>

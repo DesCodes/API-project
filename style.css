@@ -31,44 +31,95 @@ body {
   max-width: 1200px;
 }
 
-.foodImage {
-  /*width: 1000px;*/
+.rangeBox {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.formBox {
   height: 800px;
-  /*overflow: hidden;*/
-  /*margin: 0 auto;*/
-  background-image: url(images/skyline.jpg);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center right;
-
+  opacity: 0.75;
 }
 
-form {
+.formBox form {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 255px 255px 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  grid-gap: 10px;
+  grid-gap: 25px;
+}
+
+.userInput input[type=text] {
+  grid-column-start: 2;
+}
+
+.userInput input[type=submit] {
+  margin-right: 22%;
+}
+
+button {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 3;
+  margin: 0 auto;
+}
+
+::placeholder {
+  color: black;
+  font-size: 17px;
+}
+
+input[type='text'] {
+  background: dimgray;
+  font-style: italic;
 }
 
 input, button {
+  font-size: 20px;
   border-radius: 15px;
   border: 2px solid #cccccc;
   background: #4c4c4c4c;
+  background-color: #F58714;
   padding: 6px;
-  width: 75%;
-  margin: 0 auto;
+  width: 255px;
+}
+
+input, button, h1 {
   text-align: center;
 }
 
-.searchResults, input, button {
-  color: white;
+h1 {
+  font-size: 65px;
+  padding: 300px 0 200px;
+  margin: auto;
+  -webkit-text-stroke: 1px dimgray;
 }
 
-.searchResults, input, button, .markerCard {
+h4 {
+  font-size: 20px;
+}
+
+
+
+
+
+/*general font styles*/
+.searchResults, input[type='submit'], button, h1 {
+  color: #fff;
+}
+
+.searchResults, input, button, .markerCard, h1, h4, .instructions {
   font-family: Raleway;
 }
 
-.italic {
+.meters {
+  font-family: sans-serif;
+}
+
+.italic, footer {
   font-style: italic;
 }
 
@@ -76,9 +127,14 @@ h3.searchResults {
   font-weight: 400;
 }
 
-#userLocation {
-  grid-column: ;
+footer, h4, .instructions {
+  color: #F58714;
 }
+
+
+
+
+
 
 #map, .loading {
   position: absolute;
@@ -87,21 +143,31 @@ h3.searchResults {
 .mapBox {
   position: relative;
   width: 100%;
-  height: 800px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
 }
 
 #map {
   top: 0;
-  width: 100%;
-  height: 80%;
+  width: 95%;
+  height: 95%;
+  max-width: 95%;
   border-radius: 15px;
+  border: 1px solid dimgray;
+}
+
+.instructions {
+  display: flex;
+  justify-content: center;
+  font-size: 30px;
 }
 
 .loading {
-  top: 50%;
+  top: 60%;
   left: 50%;
-  right: 50%;
-  bottom: 50%;
+  margin-left: -40px;
+  width: 80px;
 }
 
 
@@ -131,5 +197,12 @@ h3.searchResults {
 path.leaflet-interactive {
   fill: black;
   stroke: gray;
+}
+
+footer {
+  /*background: linear-gradient(to bottom, rgba(76, 76, 76, 0.7), rgba(105, 105, 105, 0.7));*/
+  background: dimgray;
+  padding: 25px;
+  margin: 0 auto;
 }
 
