@@ -74,7 +74,6 @@ button {
 
 input[type='text'] {
   background: dimgray;
-  font-style: italic;
 }
 
 input, button {
@@ -119,7 +118,7 @@ h4 {
   font-family: sans-serif;
 }
 
-.italic, footer {
+.italic, input[type='text'], footer {
   font-style: italic;
 }
 
@@ -136,7 +135,7 @@ footer, h4, .instructions {
 
 
 
-#map, .loading {
+#map {
   position: absolute;
 }
 
@@ -164,9 +163,10 @@ footer, h4, .instructions {
 }
 
 .loading {
-  top: 60%;
+  top: 50%;
   left: 50%;
-  margin-left: -40px;
+  position: fixed;
+  margin: -40px;
   width: 80px;
 }
 
