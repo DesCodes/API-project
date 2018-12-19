@@ -17,15 +17,14 @@
 			<input type="text" placeholder="Input location">
 			<input type="submit">
 			<button id="userLocation">Search nearby</button>
-			
 		</form>
 	</div>
 
-	<form class="wrapper rangeBox" action="">
+<!-- 	<form class="wrapper rangeBox" action="">
 		<h4>Configure Search Radius: </h4>
-		<input id="slider" type="range" min="500" max="1000" value="500">
-		<h4 class="meters">500 Meters</h4>
-	</form>
+		<input id="slider" type="range" min="500" max="1000" value="800">
+		<h4 class="meters">800 Meters</h4>
+	</form> -->
 	
 	<div class="loading" class="wrapper">
 		<svg aria-hidden="true" data-prefix="fas" data-icon="spinner" class="svg-inline--fa fa-spinner fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -38,8 +37,20 @@
 	<div id="results" class="wrapper"></div>
 
 	<div class="mapBox wrapper">
+		<form action="" id="innerMapSearch" class="innerMapSearch">
+			<input type="text" placeholder="Input Location">
+			<input type="submit">
+		</form>
+
+		<form class="rangeBox" action="">
+				<input id="slider" type="range" min="500" max="1000" value="800">
+				<p class="meters">800 Meters</p>
+		</form>
+
 		<div id="map">
-			<p class="instructions">
+			
+
+		<!-- 	<p class="instructions">
 				INSTRUCTIONS:
 			</p><br>
 			<p class="instructions">
@@ -54,7 +65,7 @@
 			<br>
 			<p class="instructions italic">
 				Once the map has loaded, click the restaurant name to view reviews!
-			</p>
+			</p> -->
 		</div>
 	</div>
 

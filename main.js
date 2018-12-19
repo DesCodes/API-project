@@ -19,7 +19,7 @@ mapApp.restaurants = [];
 
 
 //this updates the radius of the circle
-let radius = 500;
+let radius = 800;
 
 //function that updates the html from the search request
 mapApp.searchResults = function(results) {
@@ -44,19 +44,20 @@ mapApp.getMap = function(x, y) {
 	if (!mapApp.map) {
 		//mapbox plugin that creates a new map for every search
 		//this stores the new values in the mapApp.map global object
-		mapApp.map = L.mapbox.map('map', 'mapbox.streets').setView([y, x], 15.5);
+		mapApp.map = L.mapbox.map('map', 'mapbox.streets').setView([y, x], 14.5);
 	}
 
     //on load, add a circle to the center coordinates
 	mapApp.createCircle(radius, latitude, longitude);
     //changes the map view to the current updated coordinates
-    mapApp.map.flyTo([y, x], 15.5);
+    mapApp.map.flyTo([y, x], 14.5);
     //invoke the centre marker function
 	mapApp.centerMarker();
 
 	//gets the points of interests nearby
 	mapApp.PointOfInterest(latitude, longitude);
 
+	showRangeToggler();
 	hideInstructions();
 }
 
@@ -82,6 +83,7 @@ mapApp.getUserInput = function(search) {
 				location: search,
 				limit: 50,
 				radius: 500,
+				term: 'food'
 			},
 			proxyHeaders: {
 				Authorization: 'Bearer ' + yelpAPI,
@@ -133,13 +135,13 @@ mapApp.PointOfInterest = function(x, y) {
 				longitude: y,
 				limit: 50,
 				radius: 500,
+				term: 'food'
 			},
 			proxyHeaders: {
 				Authorization: 'Bearer ' + yelpAPI,
 			}
 		}
 	}).then(function(res){
-		console.log(res)
 
 		mapApp.restaurants = [];
 		mapApp.restaurants.push(res.businesses);
@@ -172,7 +174,7 @@ mapApp.marker = function() {
 			.setLatLng([latitude, longitude])
 			.setContent(`${markerCard}`);
 
-		L.marker([latitude, longitude], {zIndexOffset: 0, opacity: 0})
+		L.marker([latitude, longitude], {zIndexOffset: 0, opacity: 1})
 			.bindPopup(individualPopup)
 			.addTo(mapApp.map);
 	});
@@ -280,10 +282,20 @@ const submitInput = function() {
 	$('#userInput').on('submit', function(e) {
 		e.preventDefault();
 		
-		const userInput = $('input[type=text]').val();
+		const userInput = $('#userInput input[type=text]').val();
 		$('input[type=text]').val('');
 		mapApp.getUserInput(userInput);
 	});
+}
+
+const innerMapSearch = function() {
+	$('#innerMapSearch').on('submit', function(e) {
+		e.preventDefault();
+
+		const userInput = $('#innerMapSearch input[type=text]').val();
+		$('input[type=text]').val('');
+		mapApp.getUserInput(userInput);
+	})
 }
 
 //displays the loading gif
@@ -361,19 +373,40 @@ const hideInstructions = function() {
 	$('.instructions').hide();
 }
 
+//scroll top function from user submit
+const scrollSubmit = function() {
+	$('#userInput').on('submit', function(){
+		$('.mapBox').show()
+		$('html, body').animate({scrollTop: $('.mapBox').offset().top - 50}, 1000)
+	});
+}
+//scroll top function from button click
+const scrollFromButton = function() {
+	$('#userLocation').on('click', function(){
+		$('.mapBox').show()
+		$('html, body').animate({scrollTop: $('.mapBox').offset().top - 50}, 1000)
+	});
+}
 
+//show range toggler 
+const showRangeToggler = function(){
+	$('.rangeBox').css('visibility', 'visible')
+	$('.innerMapSearch').css('visibility', 'visible')
+}
 
 											//	EVENT HANDLERS //
 
 mapApp.init = function() {
 
 	submitInput();
+	innerMapSearch();
 	getLocation();
 	showSpinner();
 	updateCircle();
 	sliderChange();
 	trackRestaurants();
-
+	scrollSubmit();
+	scrollFromButton();
 }
 
 //global center marker (gives the user access to the center marker)

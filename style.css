@@ -26,19 +26,74 @@ body {
 }
 
 .wrapper {
-  margin: 0 auto;
   width: 85%;
   max-width: 1200px;
 }
 
+.wrapper, button, #map, footer {
+  margin: 0 auto;
+}
+
+.rangeBox, .innerMapSearch input {
+  height: 38px;
+}
+
+.rangeBox, .innerMapSearch {
+  top: 1%;
+  visibility: hidden;
+  position: absolute;
+  background: white;
+  width: 310px;
+  z-index: 10;
+}
+
+.innerMapSearch {
+  right: 34%;
+}
+
+.innerMapSearch input {
+  border: none;
+}
+
+.innerMapSearch input[type="text"] {
+  width: 200px;
+}
+
+.innerMapSearch input[type="submit"] {
+  width: 100px;
+  color: black;
+  cursor: pointer;
+}
+
+.innerMapSearch input[type="submit"]:hover {
+  border: 1px solid dimgray;
+  border-radius: 15px;
+  box-shadow: 1px 1px rgba(0,0,0,0.2);
+}
+
 .rangeBox {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-end;
+  right: 3.5%;
+  background: white;
+}
+
+.rangeBox p {
+  padding: 10px;
+  width: 110px;
+}
+
+input[type="range"] {
+  width: 180px;
+}
+
+.rangeBox p, .rangeBox input[type='slider'] {
+  margin: 0!important;
 }
 
 .formBox {
   height: 800px;
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline.jpg);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline-min.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center right;
@@ -60,11 +115,10 @@ body {
   margin-right: 22%;
 }
 
-button {
+.userInput button {
   grid-column-start: 2;
   grid-column-end: 4;
   grid-row-start: 3;
-  margin: 0 auto;
 }
 
 ::placeholder {
@@ -72,11 +126,11 @@ button {
   font-size: 17px;
 }
 
-input[type='text'] {
+.userInput input[type='text'] {
   background: dimgray;
 }
 
-input, button {
+.userInput input, .userInput button {
   font-size: 20px;
   border-radius: 15px;
   border: 2px solid #cccccc;
@@ -136,14 +190,17 @@ footer, h4, .instructions {
 
 
 #map {
-  position: absolute;
+  /*position: absolute;*/
+  position: relative;
 }
 
 .mapBox {
   position: relative;
+  margin: 50px auto;
   width: 100%;
   height: 600px;
-  display: flex;
+  /*display: flex;*/
+  display: none;
   justify-content: center;
 }
 
@@ -203,6 +260,5 @@ footer {
   /*background: linear-gradient(to bottom, rgba(76, 76, 76, 0.7), rgba(105, 105, 105, 0.7));*/
   background: dimgray;
   padding: 25px;
-  margin: 0 auto;
 }
 
