@@ -57,8 +57,7 @@ mapApp.getMap = function(x, y) {
 	//gets the points of interests nearby
 	mapApp.PointOfInterest(latitude, longitude);
 
-	showRangeToggler();
-	hideInstructions();
+	showInnerMapSearch();
 }
 
 
@@ -367,12 +366,6 @@ const trackRestaurants = function() {
 		clearInterval(secondInterval);
 	});
 }
-
-//hides the instructions
-const hideInstructions = function() {
-	$('.instructions').hide();
-}
-
 //scroll top function from user submit
 const scrollSubmit = function() {
 	$('#userInput').on('submit', function(){
@@ -387,10 +380,8 @@ const scrollFromButton = function() {
 		$('html, body').animate({scrollTop: $('.mapBox').offset().top - 50}, 1000)
 	});
 }
-
-//show range toggler 
-const showRangeToggler = function(){
-	$('.rangeBox').css('visibility', 'visible')
+//displayes the inner search bar on the map
+const showInnerMapSearch = function(){
 	$('.innerMapSearch').css('visibility', 'visible')
 }
 
