@@ -82,7 +82,7 @@ mapApp.getUserInput = function(search) {
 				location: search,
 				limit: 50,
 				radius: 500,
-				term: 'food'
+				term: 'restaurants'
 			},
 			proxyHeaders: {
 				Authorization: 'Bearer ' + yelpAPI,
@@ -156,15 +156,19 @@ mapApp.PointOfInterest = function(x, y) {
 mapApp.marker = function() {
 	mapApp.restaurants[0].forEach(restaurant => {
 		//adds a marker for all the restaurants
-		// const restaurantName = restaurant.name;
+		if(restaurant.price == undefined){
+			restaurant.price = 'no price range'
+		}
 		const markerCard = `<div class="markerCard">
 								<img src="${restaurant.image_url}">
 								<a href='${restaurant.url}' target='_blank'>	
 									<h4>${restaurant.name}</h4>
 								</a>	
 								<p>Rating: ${restaurant.rating}</p>
+								<p>Price: ${restaurant.price}</p>
 								<p>Category: ${restaurant.categories[0].title}</p>
 								<p>Phone: ${restaurant.phone}</p>
+								<a class='reviews' href='${restaurant.url}' target='_blank'>Reviews</a>
 							</div>
 							`
 		const latitude = restaurant.coordinates.latitude;
