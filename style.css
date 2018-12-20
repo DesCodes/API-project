@@ -156,7 +156,9 @@ h1 {
   font-size: 65px;
   padding: 300px 0 200px;
   margin: auto;
-  -webkit-text-stroke: 1px dimgray;
+  font-weight: 400;
+  text-shadow: 2px 4px 5px rgba(0,0,0,1);
+  /*-webkit-text-stroke: 1px dimgray;*/
 }
 
 h4 {
