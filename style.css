@@ -47,6 +47,7 @@ body {
   height: 38px;
   display: flex;
   z-index: 10;
+  box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
 }
 
 .innerMapSearch input[type='range'] {
@@ -135,7 +136,9 @@ input[type="range"] {
 }
 
 .userInput input[type='text'] {
-  background: dimgray;
+  background: white;
+  width: 315px;
+
 }
 
 .userInput input, .userInput button {
