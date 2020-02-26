@@ -50,29 +50,34 @@ body {
   box-shadow: 1px 1px 8px rgba(0,0,0,0.2);
 }
 
-.innerMapSearch input[type='range'] {
-  margin: 0 7px;
-}
 
-.innerMapSearch p {
-  width: 120px;
-  padding: 0 15px;
-  line-height: 2.3;
-}
 
 .innerMapSearch input {
   border: none;
 }
 
 .innerMapSearch input[type="text"] {
-  width: 200px;
+  width: 35%;
 }
 
 .innerMapSearch input[type="submit"] {
-  width: 100px;
+  width: 15%;
   color: black;
   cursor: pointer;
 }
+
+.innerMapSearch input[type='range'] {
+  width: 24%;
+  margin: 0 7px;
+}
+
+.innerMapSearch p {
+  width: 26%;
+  padding: 0 15px;
+  line-height: 2.3;
+}
+
+
 
 .innerMapSearch input[type="submit"]:hover {
   border: 1px solid dimgray;
@@ -281,3 +286,45 @@ footer {
   font-size: 16px;
 }
 
+@media (max-width: 720px) {
+  .leaflet-control-zoom.leaflet-bar.leaflet-control {
+    margin-top: 50px;
+    margin-left: 7px;
+  }
+
+  .innerMapSearch {
+    width: 575px;
+  }
+}
+
+@media (max-width: 650px) {
+  .innerMapSearch {
+    width: 500px;
+  }
+}
+
+@media (max-width: 650px) {
+/*  .innerMapSearch input[type=text] {
+    width: 150px;
+  }*/
+}
+
+@media (max-width: 625px) {
+  #userInput {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userInput input[type=text],
+  .userInput input[type=submit],
+  button {
+    margin: 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .innerMapSearch {
+    width: 445px;
+  }
+}
