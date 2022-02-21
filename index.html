@@ -3,9 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="style.css">
-	<script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
-	<link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
+	<!-- <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script> -->
+	<!-- <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
+	 -->
+	<script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+	<link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
 
 	<title>Restaurant Locator</title>
 </head>
@@ -49,9 +52,7 @@
 				<p class="meters">800 Meters</p>
 		</form> -->
 
-		<div id="map">
-			
-
+		<!-- <div id="map"> -->
 		<!-- 	<p class="instructions">
 				INSTRUCTIONS:
 			</p><br>
@@ -68,9 +69,12 @@
 			<p class="instructions italic">
 				Once the map has loaded, click the restaurant name to view reviews!
 			</p> -->
-		</div>
-	</div>
+		<!-- </div> -->
+			
 
+	</div>
+	
+	<div id='map'></div>
 	<footer>
 		<p>Made with Yelp API and Mapbox</p>
 	</footer>

@@ -1,0 +1,31 @@
+{
+  "name": "api-project",
+  "version": "1.0.0",
+  "description": "A restaurant locator website that utilizes Yelp's API to search nearby or by input. The search input will accept any cities, postal codes, zip codes, provinces, and or states from around the world.",
+  "main": "main.js",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "node": "^17.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DesCodes/API-project.git"
+  },
+  "keywords": [
+    "api",
+    "yelp",
+    "api",
+    "mapbox"
+  ],
+  "author": "Desmond Tan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DesCodes/API-project/issues"
+  },
+  "homepage": "https://github.com/DesCodes/API-project#readme"
+}

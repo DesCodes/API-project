@@ -207,10 +207,6 @@ footer, h4, .instructions {
 
 
 
-#map {
-  /*position: absolute;*/
-  position: relative;
-}
 
 .mapBox {
   position: relative;
@@ -224,9 +220,12 @@ footer, h4, .instructions {
 
 #map {
   top: 0;
-  width: 95%;
+  /* width: 95%;
   height: 95%;
-  max-width: 95%;
+  max-width: 95%; */
+  max-width: 100%;
+  width: 50vw;
+  height: 50vh;
   border-radius: 15px;
   border: 1px solid dimgray;
 }
