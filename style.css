@@ -107,7 +107,7 @@ input[type="range"] {
 
 .formBox {
   height: 800px;
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline-min.jpg);
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline-min.webp);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center right;
