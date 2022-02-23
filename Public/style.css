@@ -106,12 +106,13 @@ input[type="range"] {
 }
 
 .formBox {
-  height: 800px;
+  height: 90vh;
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url(images/skyline-min.webp);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center right;
   opacity: 0.75;
+  position: relative;
 }
 
 .formBox form {
@@ -219,16 +220,28 @@ footer, h4, .instructions {
 }
 
 #map {
-  top: 0;
-  /* width: 95%;
-  height: 95%;
-  max-width: 95%; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
   max-width: 100%;
-  width: 50vw;
-  height: 50vh;
+  width: 75vw;
+  height: 75vh;
   border-radius: 15px;
   border: 1px solid dimgray;
+  opacity: 0;
+  z-index: -1;
+}@media screen and (max-width: 768px) {
+  #map {
+    width: 90vw;
+    height: 80vh;
+  }
 }
+#map.active {
+  opacity: 1;
+  z-index: 10;
+}
+
 
 .instructions {
   display: flex;
@@ -283,6 +296,8 @@ footer {
   display: inline-block;
   padding: 0 10px;
   font-size: 16px;
+  line-height: 16px;
+  margin: 0;
 }
 
 @media (max-width: 720px) {
