@@ -33,7 +33,3 @@ app.get('/map/:latlon', async (request, response) => {
   response.json(json);
 });
 
-
-
-  
-  // https://api.mapbox.com/geocoding/v5/mapbox.places/tokyo.json?access_token=pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw
