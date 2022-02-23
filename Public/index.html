@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<link rel="stylesheet" href="/style.css">
+	<link rel="stylesheet" href="style.css">
 	<link href="https://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet">
 	<!-- <script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script> -->
 	<!-- <link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet'/>
 	 -->
 	<script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
 	<link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
-
+	<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js'></script>
+	<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css' type='text/css' />
+	
 	<title>Restaurant Locator</title>
 </head>
 <body>
@@ -17,8 +19,8 @@
 		<h1 class="title">Restaurant Locator</h1>
 
 		<form id="userInput" action="" class="wrapper userInput">
-			<input type="text" placeholder="Input location">
-			<input type="submit">
+			<!-- <input type="text" placeholder="Input location">
+			<input type="submit"> -->
 			<button id="userLocation">Search nearby</button>
 		</form>
 	</div>
@@ -71,17 +73,150 @@
 			</p> -->
 		<!-- </div> -->
 			
-
+		
 	</div>
-	
 	<div id='map'></div>
+	
 	<footer>
 		<p>Made with Yelp API and Mapbox</p>
 	</footer>
 	
+	<!-- <script>
+		$(document).ready(function() {
+			mapApp = {};
+			mapboxgl.accessToken = 'pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw';
+			mapApp.map = new mapboxgl.Map({
+					container: 'map', // container ID
+					style: 'mapbox://styles/mapbox/streets-v11', // style URL
+					center: [39, 41], // starting position [lng, lat]
+					zoom: 9 // starting zoom
+			});
+
+				$('#userLocation').click(function(e) {
+					e.preventDefault();
+					navigator.geolocation.getCurrentPosition( async position => {
+						const lat = position.coords.latitude;
+						const lon = position.coords.longitude;
+						
+						const api_url = `map/${lat},${lon}`;
+						const response = await fetch(api_url);
+
+					});
+				});
+
+			});
+	</script> -->
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<!-- <script src="index.js"></script> -->
-	<script src="main.js"></script>
+	<script src="db.js"></script>
+	<script>
+		mapApp = {};
+
+		mapboxgl.accessToken = 'pk.eyJ1IjoicmhvZ2EiLCJhIjoiY2pva3oyamNxMDNpdDNwcDM2NjRyejJkNSJ9.TYs4auLcIzhsSxVgI7EXlw';
+		mapApp.map = new mapboxgl.Map({
+				container: 'map', // container ID
+				style: 'mapbox://styles/mapbox/streets-v11', // style URL
+				center: [-79.37, 43.84], // starting position [lng, lat]
+				zoom: 13 // starting zoom
+		});
+		// mapApp.map.on('load', () => {
+		//  var marker =	new mapboxgl.Marker()
+		// 		.setLngLat([-79.37, 43.84])
+		// 		.addTo(this.map);
+		// 		console.log(marker)
+		// })
+
+		mapApp.map.on('load', () => {
+			const geocoder = new MapboxGeocoder({
+				// Initialize the geocoder
+				accessToken: mapboxgl.accessToken, // Set the access token
+				mapboxgl: mapboxgl, // Set the mapbox-gl instance
+				zoom: 13, // Set the zoom level for geocoding results
+				placeholder: 'Enter an address or place name' // This placeholder text will display in the search bar
+				// bbox: [-105.116, 39.679, -104.898, 39.837] // Set a bounding box
+			});
+			// Add the geocoder to the map
+			mapApp.map.addControl(geocoder, 'top-left'); // Add the search box to the top left
+		});
+
+		function addRestaurants(restaurants) {
+			// console.log(restaurants)
+			const rest = restaurants.businesses;
+			rest.forEach(rest => {
+				const markerCard = `<div class="markerCard">
+								<img src="${rest.image_url}">
+								<a href='${rest.url}' target='_blank'>	
+									<h4>${rest.name}</h4>
+								</a>	
+								<p>Rating: ${rest.rating}</p>
+								<p>Price: ${rest.price}</p>
+								<p>Category: ${rest.categories[0].title}</p>
+								<p>Phone: ${rest.phone}</p>
+								<a class='reviews' href='${rest.url}' target='_blank'>Reviews</a>
+							</div>
+							`
+
+				const lat = rest.coordinates.latitude;
+				const lon = rest.coordinates.longitude;
+				console.log(lat, lon)
+				new mapboxgl.Marker()
+				.setLngLat([lon,lat])
+				.setPopup(new mapboxgl.Popup().setHTML(markerCard))
+				.addTo(mapApp.map);
+			});
+		}
+
+		$('#userLocation').click(function(e) {
+			e.preventDefault();
+			navigator.geolocation.getCurrentPosition( async position => {
+				const lat = position.coords.latitude;
+				const lon = position.coords.longitude;
+
+				const api_url = `map/${lat},${lon}`;
+				const response = await fetch(api_url);
+				const json = await response.json();
+				// console.log(json)
+				addRestaurants(json)
+				
+				await mapApp.map.flyTo({
+					center: [lon,lat],
+					zoom: 13
+				});
+
+				// yelp_search(lon, lat)
+			});
+		});
+
+			
+			// const yelp_search = async function(lon,lat) {
+			// 	// const lat = lat;
+			// 	// const lon = lon;
+			// 	const api_key = 'NeeK12jNxlEAng-IzrJeyS2vV7XbhyXADQmZK8_rLgVb8EzTfy3S-1fJZTYbeM-HpflLGC8gKwbOczWDgxHn_ul-sT2LDYRqBYn4_0AtxBMxeu8PGQqx3YHYJosRXHYx';
+			// 	const api_url = 'https://api.yelp.com/v3/businesses/search'
+
+			// 	const options = {
+			// 		method: 'GET',
+			// 		headers: {
+			// 			// 'Content-Type': 'application/json',
+			// 			'Authorization': 'Bearer ' + api_key
+			// 		},
+			// 		params: {
+			// 			// location: search,
+			// 			latitude: lat,
+			// 			longitude: lon,
+			// 			limit: 50,
+			// 			radius: 500,
+			// 			term: 'restaurants'
+			// 		}
+			// 	}
+
+			// 	const fetch_restaurants = await fetch(api_url, options);
+			// 	// return fetch_restaurants
+			// 	console.log(fetch_restaurants)
+				
+			// }
+	</script>
+	<script src="index.js"></script>
+	<!-- <script src="main.js"></script> -->
 </body>
 </html>
