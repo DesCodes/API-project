@@ -1,5 +1,5 @@
 const express = require('express');
-const fetch = require('cross-fetch');
+const fetch = require('node-fetch');
 const { response } = require('express');
 const res = require('express/lib/response');
 require('dotenv').config();
