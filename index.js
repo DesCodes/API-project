@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`listening at server ${port}`)
 });
-app.use(express.static('public'));
+app.use(express.static('Public'));
 app.use(express.json({ limit: '1mb' }));
 
 app.get('/map/:latlon', async (request, response) => {
