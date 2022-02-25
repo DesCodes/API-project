@@ -157,6 +157,11 @@ input[type="range"] {
   padding: 6px;
   width: 255px;
 }
+#map .mapboxgl-ctrl-geocoder--input {
+  background-color: #000;
+  font-family: 'Raleway';
+  color: #fff;
+}
 
 input, button, h1 {
   text-align: center;

@@ -49,7 +49,7 @@
 				accessToken: mapboxgl.accessToken, // Set the access token
 				mapboxgl: mapboxgl, // Set the mapbox-gl instance
 				zoom: 13, // Set the zoom level for geocoding results
-				placeholder: 'Enter an address or place name' // This placeholder text will display in the search bar
+				placeholder: 'Enter an address or place name', // This placeholder text will display in the search bar
 			});
 			// Add the geocoder to the map
 			mapApp.map.addControl(geocoder, 'top-left'); // Add the search box to the top left
@@ -92,7 +92,7 @@
 				const api_url = `map/${lat},${lon}`;
 				const response = await fetch(api_url);
 				const json = await response.json();
-				// console.log(json)
+
 				addRestaurants(json)
 				
 				await mapApp.map.flyTo({
@@ -101,7 +101,17 @@
 				});
 			});
 		});
-	
+
+		mapApp.map.on('moveend', async function(e) {
+			const lat = mapApp.map.getCenter().lat;
+			const lon = mapApp.map.getCenter().lng;
+
+			const api_url = `map/${lat},${lon}`;
+			const response = await fetch(api_url);
+			const json = await response.json();
+
+			addRestaurants(json)
+		});
 	</script>
 </body>
 </html>
