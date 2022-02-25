@@ -1,7 +1,7 @@
 const express = require('express');
 const fetch = require('node-fetch');
-const { response } = require('express');
-const res = require('express/lib/response');
+// const { response } = require('express');
+// const res = require('express/lib/response');
 require('dotenv').config();
 
 const app = express();
